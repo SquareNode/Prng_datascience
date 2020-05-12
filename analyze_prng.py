@@ -28,6 +28,15 @@ def do_erat(arr):
                 arr[y] = False
             
 
+def get_pows(n, max_el):
+    res = []
+    n_copy = n
+    while n < max_el:
+        res.append(n)
+        n*=n_copy
+    return res
+
+
 #reading rands from files
                 
 c_rands = []
@@ -146,3 +155,130 @@ plt.figure()
 plt.bar(my_primes.keys(), my_primes.values())
 plt.title('my dummy rand() primes')
 plt.show()
+
+#2^n
+pows_of_2 = get_pows(2, max(c_max, my_max))
+c_pow = 0
+for x in c_rands:
+    if x in pows_of_2:
+        c_pow+=1
+        
+my_pow = 0
+for x in my_dummy_rands:
+    if x in pows_of_2:
+        my_pow+=1
+        
+plt.figure()
+plt.bar(['c rand', 'my dummy rand'], [c_pow, my_pow])
+plt.title('num of elements = 2^n')
+plt.show()
+          
+
+#even vs odd
+c_pairity = {'even': 0, 'odd':0}
+for x in c_rands:
+    if x % 2:
+        c_pairity['odd']+=1
+    else:
+        c_pairity['even']+=1
+        
+
+my_pairity = {'even': 0, 'odd':0}
+for x in my_dummy_rands:
+    if x % 2:
+        my_pairity['odd']+=1
+    else:
+        my_pairity['even']+=1
+             
+        
+plt.figure()
+plt.bar(['c rand() evens', 'c rand ()odds', 'my rand() evens', 'my rand() odds'],
+          [c_pairity['even'], c_pairity['odd'],my_pairity['even'],
+          my_pairity['odd']])
+plt.title('even vs odd')
+plt.show()          
+
+         
+#Duplicates
+c_same = 0
+s = set()
+for x in c_rands:
+    if x in s:
+        c_same+=1
+    else:
+        s.add(x)
+
+print(c_same, len(s))
+
+
+sizes = [c_same, len(s)]
+fig1, ax1 = plt.subplots()
+ax1.pie(sizes, labels = ('Duplicates', 'Uniques'), autopct='%1.1f%%')
+ax1.axis('equal')
+ax1.set(title='c rand()')
+plt.show()
+
+my_same = 0
+s.clear()
+
+for x in my_dummy_rands:
+    if x in s:
+        my_same+=1
+    else:
+        s.add(x)
+        
+print(my_same, len(s))    
+          
+sizes = [my_same, len(s)]
+fig1, ax1 = plt.subplots()
+ax1.pie(sizes, labels = ('Duplicates', 'Uniques'), autopct='%1.1f%%')
+ax1.axis('equal')
+ax1.set(title='my dummy rand')
+plt.show()
+
+#sequence
+s.clear()
+c_seq = []
+curr_seq = 0
+for x in c_rands:
+    if x in s:
+        s.clear()
+        c_seq.append(curr_seq)
+        curr_seq = 0
+    else:
+        curr_seq+=1
+        s.add(x)
+print(c_seq)
+
+s.clear()
+my_seq = []
+curr_seq = 0
+for x in my_dummy_rands:
+    if x in s:
+        s.clear()
+        my_seq.append(curr_seq)
+        curr_seq = 0
+    else:
+        curr_seq +=1
+        s.add(x)
+
+print(my_seq)
+
+plt.figure()
+plt.plot(my_seq)
+plt.plot(c_seq)
+plt.show()
+
+print(f'longest seq my dummy prng: {max(my_seq)}\nlongest seq c rand(): \
+{max(c_seq)}')
+          
+          
+        
+          
+          
+          
+          
+          
+          
+          
+          
